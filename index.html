@@ -2,10 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GabNork Tech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="GabNork Tech - Nigeria's premier destination for laptops, phones, smartwatches, and tech accessories. Experience the future of shopping with our AI assistant." />
+    <meta name="theme-color" content="#0f172a" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GabNork Tech | Premium Gadgets" />
+    <meta property="og:description" content="Shop the latest tech gadgets with GabNork. Quality products, fast delivery, and AI-powered shopping assistance." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="GabNork Tech | Premium Gadgets" />
+    <meta property="twitter:description" content="Shop the latest tech gadgets with GabNork. Quality products, fast delivery, and AI-powered shopping assistance." />
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" />
+
+    <title>GabNork Tech | Future of Shopping</title>
+    
+    <!-- Favicon (SVG Base64) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><path d='M20 20 L50 20 L50 35 L35 35 L35 75 L50 85 L50 100 L20 85 Z' fill='%23d97706'/><path d='M55 20 L85 20 L85 65 L70 55 L70 35 L55 35 Z' fill='%23fbbf24'/><path d='M85 75 L85 85 L55 100 L55 45 L70 55 L70 85 Z' fill='%23b45309'/></svg>" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -18,11 +40,15 @@
               brand: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
                 400: '#38bdf8',
                 500: '#0ea5e9', // Sky 500
                 600: '#0284c7',
                 700: '#0369a1',
+                800: '#075985',
                 900: '#0c4a6e', // Sky 900
+                950: '#082f49',
               },
               dark: {
                 950: '#020617', // Slate 950
@@ -30,24 +56,88 @@
                 800: '#1e293b', // Slate 800
                 700: '#334155',
               }
+            },
+            animation: {
+              'gradient-x': 'gradient-x 15s ease infinite',
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              'gradient-x': {
+                '0%, 100%': {
+                  'background-size': '200% 200%',
+                  'background-position': 'left center'
+                },
+                '50%': {
+                  'background-size': '200% 200%',
+                  'background-position': 'right center'
+                },
+              },
+              'float': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              }
             }
           }
         }
       }
     </script>
+    
     <style>
       body {
         font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
+      
+      /* Initial Loader Styles */
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #0f172a; /* Slate 900 */
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease-out, visibility 0.5s;
+      }
+      
+      .loader-logo {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 24px;
+        animation: pulse 2s infinite;
+      }
+      
+      .loader-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        border-top-color: #0ea5e9; /* Brand 500 */
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
       /* Custom scrollbar for sleek look */
       ::-webkit-scrollbar {
         width: 8px;
+        height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      .dark ::-webkit-scrollbar-track {
-        background: #1e293b;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
         background: #cbd5e1;
@@ -58,6 +148,15 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
+      }
+      
+      /* Hide scrollbar for elements with class .scrollbar-hide */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
       }
     </style>
   <script type="importmap">
@@ -74,6 +173,18 @@
 </script>
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
-    <div id="root"></div>
+    <!-- Initial Loading State (Removed automatically when React mounts) -->
+    <div id="root">
+      <div id="initial-loader">
+        <svg class="loader-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 20 L50 20 L50 35 L35 35 L35 75 L50 85 L50 100 L20 85 Z" fill="#d97706" />
+          <path d="M55 20 L85 20 L85 65 L70 55 L70 35 L55 35 Z" fill="#fbbf24" />
+          <path d="M85 75 L85 85 L55 100 L55 45 L70 55 L70 85 Z" fill="#b45309" />
+        </svg>
+        <div class="loader-spinner"></div>
+        <h2 style="color: white; margin-top: 16px; font-family: sans-serif; font-weight: 600; letter-spacing: 0.05em;">GABNORK TECH</h2>
+      </div>
+    </div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
