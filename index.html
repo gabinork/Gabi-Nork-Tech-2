@@ -87,49 +87,142 @@
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        background-color: #0f172a; /* Default to dark to prevent flash */
       }
       
-      /* Initial Loader Styles */
+      /* Enhanced Initial Loader Styles */
       #initial-loader {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #0f172a; /* Slate 900 */
-        z-index: 9999;
+        background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+        z-index: 99999; /* Very high z-index to sit on top */
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: opacity 0.5s ease-out, visibility 0.5s;
+        transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+      }
+      
+      .loader-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      /* Glowing Shield & Ring Effect */
+      .loader-logo-container {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 32px;
       }
       
       .loader-logo {
-        width: 64px;
-        height: 64px;
-        margin-bottom: 24px;
-        animation: pulse 2s infinite;
+        width: 100%;
+        height: 100%;
+        animation: logo-float 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 20px rgba(217, 119, 6, 0.4));
+        position: relative;
+        z-index: 10;
       }
-      
-      .loader-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid rgba(255, 255, 255, 0.1);
+
+      .loader-ring {
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        width: 130%;
+        height: 130%;
         border-radius: 50%;
-        border-top-color: #0ea5e9; /* Brand 500 */
-        animation: spin 1s ease-in-out infinite;
+        border: 2px solid transparent;
+        border-top-color: #0ea5e9; /* Brand Sky Blue */
+        border-right-color: rgba(217, 119, 6, 0.5); /* Amber */
+        animation: spin 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        opacity: 0.8;
       }
       
-      @keyframes spin {
-        to { transform: rotate(360deg); }
+      .loader-ring-inner {
+        position: absolute;
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: spin-reverse 3s linear infinite;
+      }
+
+      .loader-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        font-size: 20px;
+        letter-spacing: 0.25em;
+        color: white;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        position: relative;
       }
       
-      @keyframes pulse {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.1); opacity: 0.8; }
-        100% { transform: scale(1); opacity: 1; }
+      .loader-title::after {
+        content: 'GABNORK';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+        background-size: 200% 100%;
+        background-position: -100% 0;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 2.5s infinite;
       }
+
+      /* Progress Bar */
+      .progress-container {
+        width: 200px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 40%;
+        background: linear-gradient(90deg, #d97706, #0ea5e9);
+        border-radius: 4px;
+        animation: progress-indeterminate 1.5s ease-in-out infinite;
+        box-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+      }
+
+      .loading-text {
+        margin-top: 16px;
+        font-size: 11px;
+        color: #64748b;
+        font-family: monospace;
+        letter-spacing: 0.1em;
+        animation: pulse-text 2s infinite;
+        text-transform: uppercase;
+      }
+
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+      @keyframes logo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+      @keyframes shimmer { 0% { background-position: -150% 0; } 100% { background-position: 150% 0; } }
+      @keyframes progress-indeterminate {
+        0% { left: -40%; width: 40%; }
+        50% { width: 60%; }
+        100% { left: 100%; width: 20%; }
+      }
+      @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
       /* Custom scrollbar for sleek look */
       ::-webkit-scrollbar {
@@ -173,18 +266,30 @@
 </script>
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
-    <!-- Initial Loading State (Removed automatically when React mounts) -->
-    <div id="root">
-      <div id="initial-loader">
-        <svg class="loader-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 20 L50 20 L50 35 L35 35 L35 75 L50 85 L50 100 L20 85 Z" fill="#d97706" />
-          <path d="M55 20 L85 20 L85 65 L70 55 L70 35 L55 35 Z" fill="#fbbf24" />
-          <path d="M85 75 L85 85 L55 100 L55 45 L70 55 L70 85 Z" fill="#b45309" />
-        </svg>
-        <div class="loader-spinner"></div>
-        <h2 style="color: white; margin-top: 16px; font-family: sans-serif; font-weight: 600; letter-spacing: 0.05em;">GABNORK TECH</h2>
+    
+    <!-- Initial Loading State (Moved outside #root for smooth fade out) -->
+    <div id="initial-loader">
+      <div class="loader-content">
+        <div class="loader-logo-container">
+          <div class="loader-ring"></div>
+          <div class="loader-ring-inner"></div>
+          <svg class="loader-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 20 L50 20 L50 35 L35 35 L35 75 L50 85 L50 100 L20 85 Z" fill="#d97706" />
+            <path d="M55 20 L85 20 L85 65 L70 55 L70 35 L55 35 Z" fill="#fbbf24" />
+            <path d="M85 75 L85 85 L55 100 L55 45 L70 55 L70 85 Z" fill="#b45309" />
+          </svg>
+        </div>
+        <h2 class="loader-title">GABNORK</h2>
+        <div class="progress-container">
+          <div class="progress-bar"></div>
+        </div>
+        <div class="loading-text">INITIALIZING SYSTEM...</div>
       </div>
     </div>
+
+    <!-- App Root -->
+    <div id="root"></div>
+    
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
