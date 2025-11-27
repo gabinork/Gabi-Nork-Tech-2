@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -20,8 +22,13 @@ export const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
+    // Simulate API call and Authentication
     setTimeout(() => {
+      // In a real app, you would verify credentials here.
+      // We simulate a user named "Emmanuel Doe" for this demo based on email.
+      const simulatedName = "Emmanuel Doe"; 
+      login(formData.email, simulatedName);
+      
       setIsLoading(false);
       navigate('/shop'); // Redirect to shop after login
     }, 1500);

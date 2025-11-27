@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle, Chrome } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const Register = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -31,12 +33,16 @@ export const Register = () => {
     
     // Simulate API call
     setTimeout(() => {
+      // Register logic here...
       setIsLoading(false);
       setIsSuccess(true);
       
+      // Auto login the new user
+      login(formData.email, formData.fullName);
+      
       // Redirect after success
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 2000);
     }, 1500);
   };
@@ -67,7 +73,7 @@ export const Register = () => {
                 <CheckCircle size={32} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Account Created!</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Redirecting you to login...</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Logging you in...</p>
             </div>
           ) : (
             <div className="px-8 pb-8">

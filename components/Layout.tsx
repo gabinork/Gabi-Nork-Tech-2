@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Search, Phone, MapPin, Mail, Facebook, Twitter, Instagram, Minus, Plus, Trash2, Sun, Moon } from 'lucide-react';
+import { ShoppingBag, Menu, X, Search, Phone, MapPin, Mail, Facebook, Twitter, Instagram, Minus, Plus, Trash2, Sun, Moon, User as UserIcon, LogOut, Newspaper } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { formatCurrency } from '../constants';
 import { ChatAssistant } from './ChatAssistant';
 
@@ -38,13 +39,16 @@ const Logo = () => (
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity, totalAmount, itemCount } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout, isAuthenticated } = useAuth();
   const location = useLocation();
   
   // Cart animation state
   const [isCartAnimating, setIsCartAnimating] = useState(false);
   const prevItemCount = useRef(itemCount);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (itemCount > prevItemCount.current) {
@@ -55,9 +59,21 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     prevItemCount.current = itemCount;
   }, [itemCount]);
 
+  // Click outside listener for user menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Shop', path: '/shop' },
+    { name: 'News', path: '/blog' },
     { name: 'Track Order', path: '/track' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -73,8 +89,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <span className="flex items-center hover:text-white cursor-pointer"><Mail size={12} className="mr-1"/> gabinorktech@gmail.com</span>
           </div>
           <div className="flex space-x-4">
-            <Link to="/login" className="hover:text-white">Login</Link>
-            <Link to="/register" className="hover:text-white">Register</Link>
+            <Link to="/news" className="hover:text-amber-500 transition-colors">Latest Tech News</Link>
           </div>
         </div>
       </div>
@@ -126,6 +141,57 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               )}
             </button>
 
+            {/* Auth Menu / User Profile - TOP RIGHT CORNER */}
+            <div className="relative hidden md:block" ref={userMenuRef}>
+              {isAuthenticated && user ? (
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-2 pl-2 pr-1 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+                >
+                  <div className="text-right hidden lg:block">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-none">Hi, {user.name.split(' ')[0]}</p>
+                    <p className="text-[10px] text-brand-600 dark:text-brand-400 font-medium">Member</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-700 flex items-center justify-center text-brand-600 dark:text-brand-400 overflow-hidden">
+                    {user.avatar ? <img src={user.avatar} alt="User" className="w-full h-full object-cover" /> : <UserIcon size={16} />}
+                  </div>
+                </button>
+              ) : (
+                <div className="flex items-center space-x-2 ml-2">
+                   <Link to="/login" className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Login</Link>
+                   <span className="text-slate-300 dark:text-slate-700">|</span>
+                   <Link to="/register" className="text-sm font-semibold text-brand-600 dark:text-brand-500 hover:text-brand-700 transition-colors">Register</Link>
+                </div>
+              )}
+
+              {/* Dropdown Menu */}
+              {isUserMenuOpen && isAuthenticated && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden animate-in slide-in-from-top-2 z-50">
+                  <div className="p-3 border-b border-slate-100 dark:border-slate-800">
+                    <p className="font-bold text-slate-900 dark:text-white truncate">{user?.name}</p>
+                    <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+                  </div>
+                  <div className="p-1">
+                    <Link to="/profile" className="flex items-center w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
+                      <UserIcon size={16} className="mr-2" /> My Profile
+                    </Link>
+                    <Link to="/track" className="flex items-center w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
+                      <ShoppingBag size={16} className="mr-2" /> My Orders
+                    </Link>
+                    <button 
+                      onClick={() => {
+                        logout();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                    >
+                      <LogOut size={16} className="mr-2" /> Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button 
               className="md:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-300"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -139,6 +205,25 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-4 space-y-4 animate-in slide-in-from-top-5">
+          
+          {/* Mobile User Profile */}
+          {isAuthenticated && user ? (
+            <div className="flex items-center space-x-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold overflow-hidden">
+                 {user.avatar ? <img src={user.avatar} alt="User" className="w-full h-full object-cover" /> : user.name.charAt(0)}
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-slate-900 dark:text-white">{user.name}</p>
+                <p className="text-xs text-slate-500">{user.email}</p>
+              </div>
+            </div>
+          ) : (
+             <div className="flex space-x-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+               <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 text-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-medium text-sm">Login</Link>
+               <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 text-center rounded-lg bg-brand-600 text-white font-medium text-sm">Register</Link>
+             </div>
+          )}
+
           {navLinks.map((link) => (
             <Link 
               key={link.name}
@@ -149,10 +234,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               {link.name}
             </Link>
           ))}
-          <div className="pt-4 flex space-x-4">
-             <Link to="/login" className="text-sm font-medium text-amber-600 dark:text-amber-500">Login</Link>
-             <Link to="/register" className="text-sm font-medium text-amber-600 dark:text-amber-500">Register</Link>
-          </div>
+
+          {isAuthenticated && (
+            <button 
+              onClick={() => {
+                logout();
+                setIsMobileMenuOpen(false);
+              }}
+              className="w-full text-left text-red-600 font-medium py-2 flex items-center"
+            >
+              <LogOut size={16} className="mr-2" /> Logout
+            </button>
+          )}
         </div>
       )}
 
@@ -195,7 +288,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <ul className="space-y-2 text-slate-400 text-sm">
               <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link></li>
               <li><Link to="/faq" className="hover:text-amber-500 transition-colors">FAQs</Link></li>
-              <li><Link to="/shipping" className="hover:text-amber-500 transition-colors">Shipping Policy</Link></li>
+              <li><Link to="/blog" className="hover:text-amber-500 transition-colors">News & Insights</Link></li>
               <li><Link to="/returns" className="hover:text-amber-500 transition-colors">Returns & Warranty</Link></li>
             </ul>
           </div>

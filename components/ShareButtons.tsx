@@ -18,46 +18,52 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ productName, url }) 
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const buttonClass = "w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:-translate-y-1 border border-transparent hover:border-brand-400/50";
+
   return (
-    <div className="flex items-center gap-2 mt-6">
-      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1">Share</span>
+    <div className="flex items-center gap-3">
+      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-2">Share:</span>
       
       <a 
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-8 h-8 flex items-center justify-center bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full transition-all transform hover:-translate-y-0.5"
+        className={buttonClass}
         title="Share on Facebook"
+        aria-label="Share on Facebook"
       >
-        <Facebook size={16} />
+        <Facebook size={18} />
       </a>
 
       <a 
         href={`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-8 h-8 flex items-center justify-center bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/40 text-sky-500 dark:text-sky-400 rounded-full transition-all transform hover:-translate-y-0.5"
+        className={buttonClass}
         title="Share on Twitter"
+        aria-label="Share on Twitter"
       >
-        <Twitter size={16} />
+        <Twitter size={18} />
       </a>
 
       <a 
         href={`https://wa.me/?text=${encodedText}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-8 h-8 flex items-center justify-center bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40 text-green-600 dark:text-green-400 rounded-full transition-all transform hover:-translate-y-0.5"
+        className={buttonClass}
         title="Share on WhatsApp"
+        aria-label="Share on WhatsApp"
       >
-        <MessageCircle size={16} />
+        <MessageCircle size={18} />
       </a>
 
       <button 
         onClick={handleCopy}
-        className="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-full transition-all transform hover:-translate-y-0.5"
+        className={buttonClass}
         title="Copy Link"
+        aria-label="Copy Link"
       >
-        {copied ? <Check size={16} className="text-green-500" /> : <LinkIcon size={16} />}
+        {copied ? <Check size={18} className="text-white" /> : <LinkIcon size={18} />}
       </button>
     </div>
   );

@@ -88,7 +88,7 @@ export const ProductDetails = () => {
 
   const handleBuyNow = () => {
     if (product) {
-      addToCart(product, false); // Add to cart without opening sidebar
+      addToCart(product);
       navigate('/checkout');
     }
   };
@@ -181,7 +181,6 @@ export const ProductDetails = () => {
                     <Crown size={14} className="mr-1" /> Premium Product
                   </span>
                 )}
-                {/* Simulated discount for visual appeal */}
                 <span className="text-slate-400 line-through text-lg font-medium ml-auto sm:ml-0">{formatCurrency(product.price * 1.1)}</span>
              </div>
              
@@ -216,7 +215,7 @@ export const ProductDetails = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <button 
               onClick={() => addToCart(product)}
               className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-lg font-bold py-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center justify-center"
@@ -229,6 +228,11 @@ export const ProductDetails = () => {
             >
               <Zap className="mr-2" fill="currentColor" /> Buy Now
             </button>
+          </div>
+
+          {/* Social Share Buttons */}
+          <div className="mb-8 flex justify-center sm:justify-start">
+             <ShareButtons productName={product.name} />
           </div>
 
           {/* Trust Signals */}
@@ -251,9 +255,6 @@ export const ProductDetails = () => {
               </div>
           </div>
           
-          <div className="mt-4">
-             <ShareButtons productName={product.name} />
-          </div>
         </div>
       </div>
 
