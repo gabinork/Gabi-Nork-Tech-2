@@ -15,19 +15,22 @@ root.render(
 );
 
 // Smoothly fade out the loader immediately after React mounts
-// We use a tiny delay (50ms) just to ensure the DOM has painted the App frame
-// This makes the app feel instant compared to the previous 800ms delay
+// Optimized with requestAnimationFrame for better frame timing
 const loader = document.getElementById('initial-loader');
 if (loader) {
-  setTimeout(() => {
-    loader.style.opacity = '0';
-    loader.style.pointerEvents = 'none'; // Prevent interactions during fade
-    
-    // Remove from DOM after fade transition completes
+  // Wait for the browser to be ready to paint the next frame
+  requestAnimationFrame(() => {
+    // Small delay to ensure the App component has rendered its initial state
     setTimeout(() => {
-      if (loader.parentNode) {
-        loader.parentNode.removeChild(loader);
-      }
-    }, 600);
-  }, 50); 
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none'; // Prevent interactions during fade
+      
+      // Remove from DOM exactly after transition completes (matching 0.5s CSS)
+      setTimeout(() => {
+        if (loader.parentNode) {
+          loader.parentNode.removeChild(loader);
+        }
+      }, 500);
+    }, 30); 
+  });
 }
