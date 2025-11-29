@@ -1,13 +1,12 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { Layout } from './components/Layout';
+import { Home } from './pages/Home'; // Static import for Landing Page to ensure instant load
 
-// Lazy Load Pages to improve initial load performance
-// We map the named exports to default exports for React.lazy
-const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
+// Lazy Load other pages to improve bundle splitting
 const Shop = lazy(() => import('./pages/Shop').then(module => ({ default: module.Shop })));
 const ProductDetails = lazy(() => import('./pages/ProductDetails').then(module => ({ default: module.ProductDetails })));
 const Checkout = lazy(() => import('./pages/Checkout').then(module => ({ default: module.Checkout })));
@@ -36,6 +35,28 @@ const Placeholder = ({ title }: { title: string }) => (
 );
 
 const App: React.FC = () => {
+  // Handle Initial Loader Dismissal
+  useEffect(() => {
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      // Use requestAnimationFrame to ensure the browser has painted the App component
+      requestAnimationFrame(() => {
+        // A slight buffer to ensure the Home page hero image has started processing/rendering
+        setTimeout(() => {
+          loader.style.opacity = '0';
+          loader.style.pointerEvents = 'none';
+          
+          // Remove from DOM after CSS transition (0.5s)
+          setTimeout(() => {
+            if (loader.parentNode) {
+              loader.parentNode.removeChild(loader);
+            }
+          }, 500);
+        }, 100); 
+      });
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <ThemeProvider>

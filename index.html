@@ -105,7 +105,7 @@
         overflow-x: hidden;
       }
       
-      /* THEME: Digital Graph Loader */
+      /* THEME: Digital Brand Loader */
       #initial-loader {
         position: fixed;
         top: 0;
@@ -122,7 +122,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: opacity 0.5s ease-out, visibility 0.5s ease-out; /* Faster fade out */
+        transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
       }
 
       /* Glow effect in center */
@@ -146,79 +146,65 @@
         align-items: center;
       }
 
-      /* The Graph Line Animation */
-      .graph-container {
+      /* Logo Styles */
+      .logo-container {
         width: 120px;
-        height: 60px;
-        position: relative;
+        height: 120px;
         margin-bottom: 24px;
-        overflow: hidden;
+        position: relative;
+        animation: pulse-logo 2.5s infinite ease-in-out;
       }
 
-      .graph-line {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: transparent;
-      }
-
-      .graph-svg {
+      .logo-svg {
         width: 100%;
         height: 100%;
-        filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+        filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.3));
       }
 
-      .graph-path {
-        stroke: #fbbf24;
-        stroke-width: 3;
-        fill: none;
-        stroke-dasharray: 200;
-        stroke-dashoffset: 200;
-        animation: drawGraph 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; /* Optimized speed */
-      }
-
-      .point-dot {
-        width: 8px;
-        height: 8px;
-        background: #fff;
-        border-radius: 50%;
-        position: absolute;
-        right: 0;
-        top: 15%; /* Aligned with end of path */
-        box-shadow: 0 0 10px #fbbf24;
-        animation: pulseDot 1.5s infinite; /* Synced speed */
-      }
-
-      .loader-title {
+      .loader-brand-name {
         font-family: 'Inter', sans-serif;
-        font-weight: 800;
-        font-size: 32px;
-        letter-spacing: -0.02em;
-        color: white;
-        margin-bottom: 8px;
+        font-weight: 900;
+        font-size: 42px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        background: linear-gradient(to right, #d97706, #fbbf24, #d97706);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        background-size: 200% auto;
+        margin-bottom: 2px;
         opacity: 0;
-        animation: fadeInUp 0.5s ease-out forwards 0.2s; /* Faster sequencing */
-        display: flex;
-        align-items: center;
+        text-align: center;
+        animation: fadeInUp 0.5s ease-out forwards 0.2s, shine 3s linear infinite;
+        line-height: 1;
       }
 
-      .loader-title .dot {
+      .loader-brand-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        font-weight: 700;
         color: #f59e0b;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        opacity: 0;
+        animation: fadeInUp 0.5s ease-out forwards 0.4s;
+        text-align: center;
+        width: 100%;
+        margin-left: 0.4em; /* Optical alignment */
       }
 
       .loading-status {
         font-family: 'JetBrains Mono', monospace;
         font-size: 10px;
-        color: #94a3b8;
+        color: #64748b;
         letter-spacing: 0.2em;
         text-transform: uppercase;
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-top: 32px;
         opacity: 0;
-        animation: fadeInUp 0.5s ease-out forwards 0.3s; /* Faster sequencing */
+        animation: fadeInUp 0.5s ease-out forwards 0.6s;
       }
 
       .status-indicator {
@@ -226,24 +212,21 @@
         height: 6px;
         background-color: #f59e0b;
         border-radius: 50%;
-        animation: blink 0.8s steps(2) infinite; /* Faster blink */
+        animation: blink 0.8s steps(2) infinite;
       }
 
-      @keyframes drawGraph {
-        0% { stroke-dashoffset: 200; opacity: 0; }
-        10% { opacity: 1; }
-        80% { stroke-dashoffset: 0; opacity: 1; }
-        100% { stroke-dashoffset: 0; opacity: 0; }
-      }
-
-      @keyframes pulseDot {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.5); opacity: 0.5; }
+      @keyframes pulse-logo {
+        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.3)); }
+        50% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.6)); }
       }
 
       @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes shine {
+        to { background-position: 200% center; }
       }
 
       @keyframes blink {
@@ -295,18 +278,28 @@
     <!-- Crypto/Tech Themed Initial Loader -->
     <div id="initial-loader">
       <div class="loader-content">
-        <div class="graph-container">
-          <svg class="graph-svg" viewBox="0 0 100 50">
-            <path class="graph-path" d="M0,50 L20,40 L35,45 L50,20 L65,30 L80,10 L100,15" />
+        <!-- Replaced graph with Geometric Shield Logo -->
+        <div class="logo-container">
+          <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="loader-gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#d97706" />
+                <stop offset="50%" stopColor="#fbbf24" />
+                <stop offset="100%" stopColor="#b45309" />
+              </linearGradient>
+            </defs>
+            <path d="M20 20 L50 20 L50 35 L35 35 L35 75 L50 85 L50 100 L20 85 Z" fill="url(#loader-gold-gradient)" />
+            <path d="M55 20 L85 20 L85 65 L70 55 L70 35 L55 35 Z" fill="url(#loader-gold-gradient)" />
+            <path d="M85 75 L85 85 L55 100 L55 45 L70 55 L70 85 Z" fill="url(#loader-gold-gradient)" />
           </svg>
-          <div class="point-dot"></div>
         </div>
         
-        <h2 class="loader-title">GABNORK<span class="dot">.</span></h2>
+        <h1 class="loader-brand-name">GABI NORK</h1>
+        <p class="loader-brand-sub">TECH</p>
         
         <div class="loading-status">
           <div class="status-indicator"></div>
-          ESTABLISHING CONNECTION
+          INITIALIZING
         </div>
       </div>
     </div>
