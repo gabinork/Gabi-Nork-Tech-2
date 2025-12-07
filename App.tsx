@@ -18,6 +18,7 @@ const About = lazy(() => import('./pages/About').then(module => ({ default: modu
 const AdminLogin = lazy(() => import('./pages/AdminLogin').then(module => ({ default: module.AdminLogin })));
 const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
 const TrackOrder = lazy(() => import('./pages/TrackOrder').then(module => ({ default: module.TrackOrder })));
+const Profile = lazy(() => import('./pages/Profile').then(module => ({ default: module.Profile })));
 
 // Minimal loading spinner for route transitions
 const PageLoader = () => (
@@ -35,24 +36,21 @@ const Placeholder = ({ title }: { title: string }) => (
 );
 
 const App: React.FC = () => {
-  // Handle Initial Loader Dismissal
+  // Handle Initial Loader Dismissal - OPTIMIZED FOR SPEED
   useEffect(() => {
     const loader = document.getElementById('initial-loader');
     if (loader) {
-      // Use requestAnimationFrame to ensure the browser has painted the App component
+      // Execute immediately after paint
       requestAnimationFrame(() => {
-        // A slight buffer to ensure the Home page hero image has started processing/rendering
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        
+        // Remove from DOM after CSS transition (0.3s)
         setTimeout(() => {
-          loader.style.opacity = '0';
-          loader.style.pointerEvents = 'none';
-          
-          // Remove from DOM after CSS transition (0.5s)
-          setTimeout(() => {
-            if (loader.parentNode) {
-              loader.parentNode.removeChild(loader);
-            }
-          }, 500);
-        }, 100); 
+          if (loader.parentNode) {
+            loader.parentNode.removeChild(loader);
+          }
+        }, 300);
       });
     }
   }, []);
@@ -80,11 +78,11 @@ const App: React.FC = () => {
                   <Route path="/news" element={<Blog />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/track" element={<TrackOrder />} />
+                  <Route path="/profile" element={<Profile />} />
                   
                   {/* Placeholders for other requested pages */}
                   <Route path="/shipping" element={<Placeholder title="Shipping Policy" />} />
                   <Route path="/returns" element={<Placeholder title="Returns & Warranty" />} />
-                  <Route path="/profile" element={<Placeholder title="My Profile" />} />
                 </Routes>
               </Suspense>
             </Layout>

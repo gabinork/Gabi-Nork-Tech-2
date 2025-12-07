@@ -13,6 +13,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart, cart } = useCart();
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   
   const quantityInCart = cart.find(item => item.id === product.id)?.quantity || 0;
 
@@ -20,12 +21,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <>
       <div className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
         <Link to={`/product/${product.id}`} className="relative aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800">
+          <div className={`absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse transition-opacity duration-500 ${isImageLoaded ? 'opacity-0' : 'opacity-100'}`} />
           <img 
             src={product.image} 
             alt={product.name} 
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            onLoad={() => setIsImageLoaded(true)}
+            className={`w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
           />
           {product.isNew && (
             <span className="absolute top-3 left-3 bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10 shadow-md">
@@ -98,26 +101,4 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   ? 'bg-brand-600 text-white ring-2 ring-brand-200 dark:ring-brand-900' 
                   : 'bg-slate-900 dark:bg-slate-700 hover:bg-brand-600 dark:hover:bg-brand-600 text-white'
                 }`}
-                aria-label={quantityInCart > 0 ? `In cart: ${quantityInCart}` : "Add to cart"}
-              >
-                <ShoppingBag size={20} className={quantityInCart > 0 ? "fill-white/20" : ""} />
-                {quantityInCart > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800 animate-in zoom-in">
-                    {quantityInCart}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {isQuickViewOpen && (
-        <QuickViewModal 
-          product={product} 
-          onClose={() => setIsQuickViewOpen(false)} 
-        />
-      )}
-    </>
-  );
-};
+                aria-label={

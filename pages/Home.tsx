@@ -59,7 +59,7 @@ export const Home = () => {
 
         {/* 3. Ambient Glows - Deep and Dark */}
         <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[120px] animate-pulse-slow"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[100px] animate-pulse delay-700"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[100px] animate-pulse delay-200"></div>
 
         {/* 4. Parallax Floating Tech Elements (Decorations) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -83,7 +83,7 @@ export const Home = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             
             {/* Text Content */}
-            <div className="max-w-2xl space-y-8 animate-in slide-in-from-left duration-700 fade-in relative z-20">
+            <div className="max-w-3xl space-y-8 animate-in slide-in-from-left duration-500 fade-in relative z-20">
               <div className="inline-flex items-center space-x-2 bg-slate-900/80 border border-slate-800 rounded-full px-4 py-1.5 backdrop-blur-md shadow-lg shadow-black/20">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
@@ -95,9 +95,9 @@ export const Home = () => {
               </div>
               
               <h1 className="text-5xl md:text-7xl font-bold text-white leading-[1.1] tracking-tight">
-                Tech That <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-amber-200 to-brand-500 animate-gradient-x">
-                  Moves You.
+                Gabi Nork Tech <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-amber-200 to-brand-500 animate-gradient-x text-3xl md:text-5xl block mt-2">
+                  Technology That Moves You Forward.
                 </span>
               </h1>
               
@@ -123,7 +123,7 @@ export const Home = () => {
             </div>
 
             {/* Hero Image / 3D Composition */}
-            <div className="hidden lg:block relative w-[500px] h-[500px] animate-in zoom-in duration-1000 delay-200">
+            <div className="hidden lg:block relative w-[500px] h-[500px] animate-in zoom-in duration-700 delay-200">
                {/* Glowing Ring Background */}
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-slate-800 rounded-full animate-[spin_20s_linear_infinite]"></div>
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border border-dashed border-slate-700/50 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
@@ -154,7 +154,7 @@ export const Home = () => {
                   </div>
                   
                   {/* Additional Floating Badge */}
-                  <div className="absolute -top-4 -right-4 bg-[#0f172a] p-4 rounded-xl shadow-xl border border-slate-800 animate-float delay-1000">
+                  <div className="absolute -top-4 -right-4 bg-[#0f172a] p-4 rounded-xl shadow-xl border border-slate-800 animate-float delay-500">
                      <Zap size={20} className="text-brand-400 fill-brand-400" />
                   </div>
                </div>
